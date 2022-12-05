@@ -16,12 +16,14 @@ podman login -u admin -p $SRC_TOKEN $SRC_REG --tls-verify=false
 podman login -u admin -p $DST_TOKEN $DST_REG --tls-verify=false
 
 echo "Starting Image Migration"
+
 ISTAGS=`oc get is -o jsonpath="{range .items[*]}{@.metadata.name}{':'}{@.status.tags[0].tag}{'\n'}{end}" -n $NAMESPACE`
 for ISTAG in $ISTAGS
 do
-        echo "Migrating: $ISTAG"
         IZ=${ISTAG: -1}
         if [ "$IZ" != ":" ]; then
+                echo "Migrating: $ISTAG"
+                echo "oc image mirror -a $XDG_RUNTIME_DIR/containers/auth.json $SRC_REG/$NAMESPACE/$ISTAG $DST_REG/$NAMESPACE/$ISTAG --insecure=true"
                 oc image mirror -a $XDG_RUNTIME_DIR/containers/auth.json $SRC_REG/$NAMESPACE/$ISTAG $DST_REG/$NAMESPACE/$ISTAG --insecure=true
         fi
 done
