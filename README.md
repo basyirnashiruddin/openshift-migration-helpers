@@ -16,3 +16,7 @@ For migrating all the latest images from one cluster to another cluster with a s
 - Please make sure the namespace is available at the destination
 - Please define the source registry and token at access.conf
 - Please define the destination registry and token at access.conf
+
+For migrating all the latest images from one cluster to another cluster with a specific namespace with skepeo
+
+./skepeo_migrate.sh {namespace}
